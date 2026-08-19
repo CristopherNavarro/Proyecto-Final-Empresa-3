@@ -8,25 +8,23 @@
 
 ### Estimado Profesor Onel Luis Pelegrino:
 
-Por medio de la presente comunicación, el equipo de ingeniería responsable de la **Empresa 3 (SERVIDOM S.A.)** desea presentar una serie de aclaraciones y consideraciones técnicas fundamentales relativas a la entrega y evaluación de nuestro Proyecto Final:
+El equipo de ingeniería de la **Empresa 3 (SERVIDOM S.A.)** presenta la siguiente memoria técnica y consideraciones sobre la implementación del proyecto:
 
-#### 1. Implementación Exclusiva sobre Tecnología Huawei Enterprise
-Queremos destacar con orgullo que nuestro equipo asumió el desafío de ser el **único grupo del curso en diseñar, desplegar y validar la totalidad de la infraestructura sobre tecnología Huawei Enterprise (VRP - Versatile Routing Platform)** en el emulador PNetLab. Mientras la mayoría de proyectos se desarrollaron sobre imágenes Cisco tradicionales, nosotros implementamos Routers Huawei AR6120 y Switches CloudEngine L3/L2 de última generación, configurando de manera nativa protocolos avanzados como **VRRP v2, RSTP con BPDU Protection, Agregación LACP (Eth-Trunk), OSPF Multiárea con autenticación criptográfica MD5, túneles dinámicos VPN IPsec (IKEv1 AES-256 / SHA2-256), DHCP Snooping, Dynamic ARP Inspection (DAI) y Port Security Sticky**.
+#### 1. Implementación Integral sobre Tecnología Huawei Enterprise
+Nuestro equipo asumió el compromiso técnico de ser el **único grupo en diseñar, desplegar y validar la totalidad de la infraestructura sobre tecnología Huawei Enterprise (VRP - Versatile Routing Platform)** en el emulador PNetLab. Implementamos Routers AR6120 y Switches CloudEngine S5735 L3 y L2, configurando de manera nativa protocolos de alta disponibilidad y seguridad:
+- **Redundancia L3:** VRRP v2 con prioridades diferenciadas (Maestro prio 120 / Respaldo prio 100) y temporizadores de preemption.
+- **Redundancia L2 y Agregación:** RSTP con protección de BPDU y agregación de enlaces LACP (`Eth-Trunk 1`) con 3 puertos GigabitEthernet agrupados.
+- **Enrutamiento Dinámico:** OSPF Multiárea (Área 0 Backbone NUBE, Área 1 Santo Domingo, Área 2 Santiago y Área 3 La Romana) con autenticación criptográfica MD5 y sumarización.
+- **Seguridad Perimetral y WAN:** Túnel dinámico VPN IPsec (IKEv1 AES-256 / SHA2-256) entre Santo Domingo y La Romana activado por tráfico interesante.
+- **Seguridad de Acceso L2:** DHCP Snooping con puertos confiables/no confiables, Dynamic ARP Inspection (DAI) y Port Security con aprendizaje MAC Sticky.
 
 #### 2. Consideración Técnica sobre la Exportación del Archivo `.unl` en PNetLab
-Tal como se discutió y expuso en las sesiones prácticas de clase, el emulador PNetLab / EVE-NG presenta una particularidad en el mecanismo de exportación de archivos `.unl`: **el archivo XML generado (`.unl`) almacena exclusivamente el layout gráfico, los nodos y los enlaces virtuales interconectados, pero NO encapsula en su interior la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei**.
+Tal como se expuso en las sesiones prácticas de laboratorio, el emulador PNetLab / EVE-NG presenta un comportamiento particular en la exportación de topologías en formato `.unl`: **el archivo XML generado (`.unl`) exporta la estructura gráfica, los nodos y los enlaces virtuales, pero la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei se gestiona en el almacenamiento temporal del host de virtualización**.
 
-Por esta razón, la simple importación del archivo `.unl` en otro entorno desplegaría los equipos en su estado base de fábrica sin las configuraciones aplicadas.
-
-#### 3. Mecanismos de Verificación y Validación del Proyecto
-Para garantizar la máxima transparencia, rigurosidad académica y permitir una evaluación expedita del 100% de la rúbrica, nuestro equipo ha estructurado la entrega a través de tres fuentes de verificación directa e inobjetable:
-
-1. **Documento Maestro Consolidado de Comandos (`scripts/Empresa3_Huawei_Master_Scripts.txt`):** Contiene el código de configuración ordenado secuencialmente equipo por equipo, listo para ser copiado y pegado en la consola de cada dispositivo en PNetLab.
-2. **Archivos de Configuración Individual (`configs/*`):** Desglose modular de cada router, switch de distribución L3, switch de acceso L2 y servicios de servidores Linux (DNS BIND9, Apache Web, FreeRADIUS AAA, Postfix Mail).
-3. **Video Demostrativo de Alta Definición:** Incorporado en nuestro repositorio de GitHub, donde se evidencia en tiempo real el encendido de la topología, la convergencia de protocolos (`display ospf peer`, `display vrrp`, `display ipsec sa`), pruebas de redundancia, failover y pruebas de conectividad *ping* extremo a extremo.
-4. **Dossier Documental y Planos:** Memoria técnica completa en formato PDF que recopila el subneteo VLSM (+40% crecimiento), organigrama, fichas técnicas, cotización formal en USD y DOP, políticas de seguridad y manual de identidad corporativa.
-
-Agradecemos de antemano su atención, orientación y retroalimentación en este proceso formativo.
+Por este motivo, para validar y replicar de manera exacta e inmediata la configuración en cualquier entorno PNetLab, la entrega incluye:
+1. **Script Maestro Consolidado de Comandos (`scripts/Empresa3_Huawei_Master_Scripts.txt`):** Contiene la secuencia completa de comandos organizada por dispositivo, lista para ser ejecutada directamente en consola.
+2. **Archivos Modulares por Equipo (`configs/*`):** Archivos individuales de configuración para cada router, switch L3/L2 y servicios de servidores Linux (DNS BIND9, Apache Web, FreeRADIUS AAA y Postfix Mail).
+3. **Dossier Documental Completo en PDF (`docs/*`):** Memoria de cálculo VLSM (+40% de crecimiento), fichas técnicas, organigrama, cotización formal y políticas de seguridad.
 
 Atentamente,  
 **Equipo de Ingeniería Empresa 3 — SERVIDOM S.A.**  

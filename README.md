@@ -9,21 +9,19 @@
 
 ## 📢 NOTA ACLARATORIA FORMAL PARA EL DOCENTE
 
-> ### 🔴 Consideraciones Técnicas Importantes sobre la Implementación y Evaluación
+> ### 🔴 Consideraciones Técnicas sobre la Implementación y Evaluación
 > 
 > 1. **ÚNICO EQUIPO EN TECNOLOGÍA HUAWEI ENTERPRISE:**  
 >    Nuestro equipo de ingeniería asumió con rigor el desafío de ser el **único grupo en diseñar, configurar y validar el 100% de la infraestructura sobre tecnología Huawei Enterprise (VRP)** en el emulador PNetLab. Implementamos Routers AR6120, Switches CloudEngine S5735 L3 y L2, configurando de forma nativa **VRRP v2, RSTP con BPDU Protection, Agregación LACP (Eth-Trunk), OSPF Multiárea con autenticación criptográfica MD5, túnel dinámico VPN IPsec (IKEv1 AES-256 / SHA2-256), DHCP Snooping, Dynamic ARP Inspection (DAI) y Port Security Sticky**.
 > 
 > 2. **INCONVENIENTE TÉCNICO CON LA EXPORTACIÓN DEL ARCHIVO `.unl` EN PNETLAB:**  
->    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado exporta la topología gráfica, los nodos y las conexiones virtuales, pero NO almacena en su interior la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei**.
+>    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado exporta la topología gráfica, los nodos y las conexiones virtuales, pero la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei se gestiona en el almacenamiento temporal del host de virtualización**.
 > 
 > 3. **MECANISMOS DE VALIDACIÓN Y EVALUACIÓN DIRECTA:**  
 >    Para permitir una evaluación transparente y rigurosa del 100% de la rúbrica, la implementación está completamente documentada y verificable mediante:
 >    * **Script Maestro Consolidado:** [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) con todo el código listo para copiar y pegar en cada equipo de PNetLab.
 >    * **Configuraciones Modulares por Equipo:** Disponibles en la carpeta [`configs/`](configs/).
->    * **Video Demostrativo Técnico:** Grabación en alta definición que valida en tiempo real la conectividad, convergencia OSPF, failover VRRP, túnel IPsec y servicios del DataCenter.
 >    * **Dossier Documental en PDF:** Archivos ejecutivos descargables en la carpeta [`docs/`](docs/).
->    * *El archivo `.unl` de la topología se incorporará en la carpeta `diagrams/` en el transcurso de las próximas 1 a 2 horas.*
 
 ---
 
@@ -48,7 +46,6 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 | :--- | :---: | :---: | :--- |
 | **Dossier Completo del Proyecto** | [📥 **Descargar PDF**](PROYECTO_FINAL_EMPRESA_3_OFICIAL.pdf) | — | Memoria técnica completa de 9 páginas con todas las secciones integradas. |
 | **Nota Aclaratoria al Docente** | [📥 **Descargar PDF**](docs/NOTA_ACLARATORIA_DOCENTE.pdf) | [Ver MD](docs/nota-aclaratoria-docente.md) | Comunicación formal explicando la tecnología Huawei y el caso del archivo `.unl`. |
-| **Guía del Video Demostrativo** | [📥 **Descargar PDF**](docs/GUIA_VIDEO_DEMOSTRATIVO.pdf) | [Ver MD](docs/guia-video-demostrativo.md) | Checklist exhaustivo de pruebas técnicas y comandos para la grabación. |
 | **Plan de Direccionamiento VLSM** | [📥 **Descargar PDF**](docs/DIRECCIONAMIENTO_IP_VLSM.pdf) | [Ver MD](docs/direccionamiento-ip.md) | Tablas de subneteo auditadas con +40% de crecimiento a 5 años. |
 | **Fichas Técnicas de Equipos** | [📥 **Descargar PDF**](docs/FICHA_TECNICA_EQUIPOS.pdf) | [Ver MD](docs/equipos.md) | Especificaciones Huawei AR6120, CloudEngine S5735 y comparativa vs Cisco. |
 | **Organigrama y Perfiles TI** | [📥 **Descargar PDF**](docs/ORGANIGRAMA_Y_EQUIPO.pdf) | [Ver MD](docs/organigrama.md) | Estructura organizacional y funciones de los 6 ingenieros del equipo. |
@@ -94,13 +91,6 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
  (Redundancia VRRP + RSTP)                      │   └─────────► RADIUS/NFS(192.168.10.68)
                                                 └─────────────► Deptos Ventas/Admin
 ```
-
----
-
-## 🎥 Video Demostrativo de Funcionamiento
-
-> 🔗 **Enlace al Video Demostrativo:** `[ENLACE DE VIDEO — DISPONIBLE EN 1-2 HORAS TRAS GRABACIÓN]`  
-> *(El video se alojará en YouTube / Google Drive y el enlace directo se actualizará en este apartado junto con el archivo de topología `.unl`).*
 
 ---
 
@@ -150,7 +140,7 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 ## 📂 Estructura del Repositorio
 
 ```text
-├── PROYECTO FINAL DE INFRAESTRUCTURA DE RED DE LA EMPRESA 3.pdf   (Dossier oficial de 12 páginas)
+├── PROYECTO FINAL DE INFRAESTRUCTURA DE RED DE LA EMPRESA 3.pdf   (Dossier oficial de 9 páginas)
 ├── PROYECTO_FINAL_EMPRESA_3_OFICIAL.pdf                           (Copia oficial definitiva)
 ├── README.md                                                      (Portada de GitHub con topología y datos)
 ├── branding/
@@ -167,14 +157,12 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 │   └── README.md                                                  (Topología y espacio reservado para archivo .unl)
 ├── docs/
 │   ├── NOTA_ACLARATORIA_DOCENTE.pdf                               (Nota formal en PDF sobre tecnología Huawei y .unl)
-│   ├── GUIA_VIDEO_DEMOSTRATIVO.pdf                                (Checklist de pruebas técnicas para el video)
 │   ├── DIRECCIONAMIENTO_IP_VLSM.pdf                               (Tabla VLSM en PDF con +40% de crecimiento)
 │   ├── FICHA_TECNICA_EQUIPOS.pdf                                  (Datasheets Huawei vs Cisco en PDF)
 │   ├── ORGANIGRAMA_Y_EQUIPO.pdf                                   (Perfiles y roles de los 6 integrantes en PDF)
 │   ├── COTIZACION_FORMAL.pdf                                      (Presupuesto formal en USD y DOP en PDF)
 │   ├── POLITICAS_DE_SEGURIDAD.pdf                                 (Políticas de seguridad L2/L3 en PDF)
 │   ├── nota-aclaratoria-docente.md                                (Nota formal en Markdown)
-│   ├── guia-video-demostrativo.md                                 (Guía técnica en Markdown)
 │   ├── direccionamiento-ip.md                                     (VLSM en Markdown)
 │   ├── equipos.md                                                 (Fichas técnicas en Markdown)
 │   ├── organigrama.md                                             (Organigrama en Markdown)
