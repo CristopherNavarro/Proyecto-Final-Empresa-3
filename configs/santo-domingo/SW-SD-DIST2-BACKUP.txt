@@ -1,0 +1,141 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: SW4 (Switch de Distribución 2 — Santo Domingo)
+! Función: Gateway L3, VRRP Respaldo (Prioridad 100), Respaldo LAN, Eth-Trunk
+! ==============================================================================
+
+system-view
+sysname SW4
+
+# --- CREACIÓN DE VLANS ---
+vlan batch 10 20 30 40 99 999
+
+# --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+#
+rsa local-key-pair create
+stelnet server enable
+#
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+# --- ENLACE ROUTED PORT HACIA ROUTER NÚCLEO R11 ---
+interface GigabitEthernet0/0/0
+ description Uplink-Routed-Hacia-R11
+ undo portswitch
+ ip address 192.168.254.14 255.255.255.252
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+# --- INTERFACES VLAN (GATEWAYS CON REDUNDANCIA VRRP RESPALDO) ---
+interface Vlanif10
+ description Depto1-Comercial-Gateway-Backup
+ ip address 192.168.0.3 255.255.255.0
+ vrrp vrid 10 virtual-ip 192.168.0.1
+ vrrp vrid 10 priority 100
+
+interface Vlanif20
+ description Depto2-RRHH-Gateway-Backup
+ ip address 192.168.1.3 255.255.255.128
+ vrrp vrid 20 virtual-ip 192.168.1.1
+ vrrp vrid 20 priority 100
+
+interface Vlanif30
+ description Depto3-Operaciones-Gateway-Backup
+ ip address 192.168.1.131 255.255.255.128
+ vrrp vrid 30 virtual-ip 192.168.1.129
+ vrrp vrid 30 priority 100
+
+interface Vlanif40
+ description Depto4-Finanzas-Gateway-Backup
+ ip address 192.168.2.3 255.255.255.128
+ vrrp vrid 40 virtual-ip 192.168.2.1
+ vrrp vrid 40 priority 100
+
+interface Vlanif99
+ description VLAN-Gestion-Switches-Backup
+ ip address 192.168.3.3 255.255.255.240
+ vrrp vrid 99 virtual-ip 192.168.3.1
+ vrrp vrid 99 priority 100
+
+# --- AGREGACIÓN DE ENLACES ETH-TRUNK ENTRE DISTRIBUIDORES ---
+interface Eth-Trunk 1
+ description Enlace-Troncal-Redundante-Hacia-SW3
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ mode lacp-static
+
+interface GigabitEthernet1/0/3
+ description Miembro-EthTrunk1
+ eth-trunk 1
+
+interface GigabitEthernet1/0/4
+ description Miembro-EthTrunk1
+ eth-trunk 1
+
+interface GigabitEthernet1/0/5
+ description Miembro-EthTrunk1
+ eth-trunk 1
+
+# --- DOWNLINKS TRUNK HACIA SWITCHES DE ACCESO ---
+interface GigabitEthernet1/0/0
+ description Downlink-Hacia-SW5-Acceso1
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ stp bpdu-protection
+
+interface GigabitEthernet1/0/1
+ description Downlink-Hacia-SW6-Acceso2
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ stp bpdu-protection
+
+interface GigabitEthernet1/0/2
+ description Downlink-Hacia-SW7-Acceso3
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ stp bpdu-protection
+
+# --- PROTOCOLO STP (RSTP SECONDARY ROOT) Y MITIGACIÓN DE CAPA 2 ---
+stp mode rstp
+stp priority 8192
+stp bpdu-protection
+
+dhcp snooping enable
+vlan 10
+ dhcp snooping enable
+vlan 20
+ dhcp snooping enable
+vlan 30
+ dhcp snooping enable
+vlan 40
+ dhcp snooping enable
+
+arp anti-attack check user-bind enable
+arp anti-attack gateway-duplicate enable
+
+# --- ENRUTAMIENTO DINÁMICO OSPF (ÁREA 1 SANTO DOMINGO) ---
+ospf 1 router-id 192.168.3.3
+ area 0.0.0.1
+  network 192.168.254.12 0.0.0.3
+  network 192.168.0.0 0.0.0.255
+  network 192.168.1.0 0.0.0.255
+  network 192.168.2.0 0.0.0.127
+  network 192.168.3.0 0.0.0.15
+ silent-interface Vlanif10
+ silent-interface Vlanif20
+ silent-interface Vlanif30
+ silent-interface Vlanif40
+ silent-interface Vlanif99
+
+ssh user admin authentication-type password
+return
+save

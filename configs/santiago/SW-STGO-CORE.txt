@@ -1,0 +1,109 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: SW10 (Switch L3 / Gateway de Sede Santiago)
+! Función: Enrutador del Sitio, OSPF Área 0 y Área 2, Gateway VLANs Santiago
+! ==============================================================================
+
+system-view
+sysname SW10
+
+vlan batch 10 20 30 40 254 999
+
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+rsa local-key-pair create
+stelnet server enable
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+dhcp enable
+
+# --- INTERFAZ LOOPBACK ---
+interface LoopBack0
+ description Router-ID OSPF Santiago
+ ip address 192.168.255.3 255.255.255.255
+
+# --- UPLINK HACIA NUBE WAN (ÁREA 0 OSPF) ---
+interface GigabitEthernet1/0/0
+ description Uplink-NUBE-Backbone-Area0
+ port link-type access
+ port default vlan 254
+
+interface Vlanif254
+ description Interfaz-WAN-NUBE
+ ip address 192.168.254.3 255.255.254.248
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+# --- GATEWAYS DE LAS VLANS DE SANTIAGO ---
+interface Vlanif10
+ description Centro-de-Datos-LAN-Gateway
+ ip address 192.168.10.1 255.255.255.240
+ dhcp select interface
+ dhcp server excluded-ip-address 192.168.10.1 192.168.10.2
+ dhcp server dns-list 192.168.10.66
+
+interface Vlanif30
+ description Administracion-Cibao-Gateway
+ ip address 192.168.10.17 255.255.255.240
+ dhcp select interface
+ dhcp server excluded-ip-address 192.168.10.17 192.168.10.18
+ dhcp server dns-list 192.168.10.66
+
+interface Vlanif20
+ description Ventas-Cibao-Gateway
+ ip address 192.168.10.33 255.255.255.224
+ dhcp select interface
+ dhcp server excluded-ip-address 192.168.10.33 192.168.10.35
+ dhcp server dns-list 192.168.10.66
+
+interface Vlanif40
+ description Segmento-Servidores-DataCenter
+ ip address 192.168.10.65 255.255.255.240
+
+# --- DOWNLINKS REDUNDANTES HACIA SWITCH DE SERVIDORES SW11 ---
+interface GigabitEthernet1/0/1
+ description Downlink-Hacia-SW11-Servidores
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40
+ port trunk pvid vlan 999
+
+interface GigabitEthernet1/0/2
+ description Downlink-Redundante-Hacia-SW11
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40
+ port trunk pvid vlan 999
+
+# --- SEGURIDAD DE CAPA 2 Y FILTRADO ACL ---
+stp mode rstp
+stp priority 4096
+dhcp snooping enable
+vlan 10
+ dhcp snooping enable
+vlan 20
+ dhcp snooping enable
+vlan 30
+ dhcp snooping enable
+arp anti-attack check user-bind enable
+
+# --- ENRUTAMIENTO DINÁMICO OSPF (ÁREA 0 Y ÁREA 2) ---
+ospf 1 router-id 192.168.255.3
+ area 0.0.0.0
+  network 192.168.254.0 0.0.0.7
+  network 192.168.255.3 0.0.0.0
+ area 0.0.0.2
+  network 192.168.10.0 0.0.0.15
+  network 192.168.10.16 0.0.0.15
+  network 192.168.10.32 0.0.0.31
+  network 192.168.10.64 0.0.0.15
+ silent-interface Vlanif10
+ silent-interface Vlanif20
+ silent-interface Vlanif30
+ silent-interface Vlanif40
+
+ssh user admin authentication-type password
+return
+save

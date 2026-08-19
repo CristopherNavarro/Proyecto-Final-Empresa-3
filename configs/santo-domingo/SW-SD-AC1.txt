@@ -1,0 +1,73 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: SW5 (Switch de Acceso 1 — Santo Domingo)
+! Función: Acceso Cableado Depto. 1 (Comercial / Ventas), Port Security, Snooping
+! ==============================================================================
+
+system-view
+sysname SW5
+
+vlan batch 10 20 30 40 99 999
+
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+rsa local-key-pair create
+stelnet server enable
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+# --- UPLINKS TRUNK REDUNDANTES HACIA DISTRIBUCIÓN ---
+interface GigabitEthernet1/0/0
+ description Uplink-Hacia-SW3-Distribucion1
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ dhcp snooping trusted
+
+interface GigabitEthernet1/0/1
+ description Uplink-Hacia-SW4-Distribucion2
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30 40 99
+ port trunk pvid vlan 999
+ dhcp snooping trusted
+
+# --- PUERTOS DE ACCESO USUARIOS (DEPTO 1 - COMERCIAL) ---
+interface GigabitEthernet1/0/2
+ description Estacion-Trabajo-Depto1-VLAN10
+ port link-type access
+ port default vlan 10
+ port-security enable
+ port-security max-mac-num 2
+ port-security protect-action restrict
+ port-security mac-address sticky
+ stp edged-port enable
+ stp bpdu-protection
+ dhcp snooping enable
+
+interface GigabitEthernet1/0/3
+ description Estacion-Trabajo-Depto1-VLAN10
+ port link-type access
+ port default vlan 10
+ port-security enable
+ port-security max-mac-num 2
+ port-security protect-action restrict
+ port-security mac-address sticky
+ stp edged-port enable
+ stp bpdu-protection
+ dhcp snooping enable
+
+# --- SEGURIDAD DE CAPA 2 GLOBAL ---
+stp mode rstp
+stp priority 32768
+dhcp snooping enable
+vlan 10
+ dhcp snooping enable
+arp anti-attack check user-bind enable
+
+ssh user admin authentication-type password
+return
+save

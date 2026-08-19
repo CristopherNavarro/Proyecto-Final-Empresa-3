@@ -1,0 +1,73 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: SW11 (Switch de Acceso a Servidores — Santiago)
+! Función: Conexión de Servidores DNS, Web, Mail y RADIUS (VLAN 40)
+! ==============================================================================
+
+system-view
+sysname SW11
+
+vlan batch 40 999
+
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+rsa local-key-pair create
+stelnet server enable
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+# --- UPLINKS TRUNK HACIA SW10 ---
+interface GigabitEthernet1/0/0
+ description Uplink-Hacia-SW10-Core
+ port link-type trunk
+ port trunk allow-pass vlan 40
+ port trunk pvid vlan 999
+
+interface GigabitEthernet1/0/1
+ description Uplink-Redundante-Hacia-SW10
+ port link-type trunk
+ port trunk allow-pass vlan 40
+ port trunk pvid vlan 999
+
+# --- PUERTOS DE ACCESO DEDICADOS PARA SERVIDORES DE DATACENTER ---
+interface GigabitEthernet1/0/2
+ description Servidor-SERVER3-FTP-RADIUS-NFS
+ port link-type access
+ port default vlan 40
+ port-security enable
+ port-security max-mac-num 1
+ port-security protect-action restrict
+ port-security mac-address sticky
+ stp edged-port enable
+ stp bpdu-protection
+
+interface GigabitEthernet1/0/3
+ description Servidor-SERVER2-MAIL-Corporativo
+ port link-type access
+ port default vlan 40
+ port-security enable
+ port-security max-mac-num 1
+ port-security protect-action restrict
+ port-security mac-address sticky
+ stp edged-port enable
+ stp bpdu-protection
+
+interface GigabitEthernet1/0/4
+ description Servidor-SERVER1-DNS-WEB-DHCP
+ port link-type access
+ port default vlan 40
+ port-security enable
+ port-security max-mac-num 1
+ port-security protect-action restrict
+ port-security mac-address sticky
+ stp edged-port enable
+ stp bpdu-protection
+
+stp mode rstp
+ssh user admin authentication-type password
+return
+save

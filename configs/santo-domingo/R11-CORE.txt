@@ -1,0 +1,98 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: R11 (Router de Núcleo Santo Domingo)
+! Función: Gateway WAN, OSPF Área 0 y 1, NAT Salida Internet, Hub VPN IPsec
+! ==============================================================================
+
+system-view
+sysname R11
+
+# --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+#
+rsa local-key-pair create
+stelnet server enable
+#
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+#
+user-interface console 0
+ idle-timeout 10 0
+
+# --- INTERFACES LOOPBACK Y TRÁNSITO WAN ---
+interface LoopBack0
+ description Router-ID OSPF y Gestión R11
+ ip address 192.168.255.1 255.255.255.255
+
+interface GigabitEthernet0/0/2
+ description WAN-NUBE-Backbone-Area0
+ ip address 192.168.254.1 255.255.255.248
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+interface GigabitEthernet0/0/1
+ description PTP-Hacia-SW3-Distribucion1
+ ip address 192.168.254.9 255.255.255.252
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+interface GigabitEthernet0/0/0
+ description PTP-Hacia-SW4-Distribucion2
+ ip address 192.168.254.13 255.255.255.252
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+# --- SALIDA A INTERNET PÚBLICA Y NAT OVERLOAD (NAPT) ---
+acl number 2001
+ description NAT-SALIDA-INTERNET-PUBLICA
+ rule 5 permit source 192.168.0.0 0.0.255.255
+
+interface GigabitEthernet0/0/3
+ description Salida-WAN-ISP-Publica
+ ip address 19.0.0.1 255.255.255.252
+ nat outbound 2001
+
+ip route-static 0.0.0.0 0.0.0.0 19.0.0.2
+
+# --- VPN IPSEC DINÁMICA (HUB SANTO DOMINGO <-> LA ROMANA) ---
+acl number 3101
+ description TRAFICO-INTERESANTE-VPN-SD-ROMANA
+ rule 5 permit ip source 192.168.0.0 0.0.3.255 destination 192.168.20.0 0.0.0.255
+
+ike proposal 1
+ encryption-algorithm aes-256
+ authentication-algorithm sha2-256
+ dh group14
+
+ike peer ROMANA
+ ike-proposal 1
+ pre-shared-key cipher ServidomEmpresa3@2026!
+ remote-address 192.168.254.2
+
+ipsec proposal PROP1
+ esp authentication-algorithm sha2-256
+ esp encryption-algorithm aes-256
+
+ipsec policy POL-ROMANA 10 isakmp
+ security acl 3101
+ ike-peer ROMANA
+ proposal PROP1
+
+interface GigabitEthernet0/0/2
+ ipsec policy POL-ROMANA
+
+# --- ENRUTAMIENTO OSPF MULTIÁREA (ÁREA 0 Y ÁREA 1) ---
+ospf 1 router-id 192.168.255.1
+ area 0.0.0.0
+  network 192.168.254.0 0.0.0.7
+  network 192.168.255.1 0.0.0.0
+ area 0.0.0.1
+  network 192.168.254.8 0.0.0.3
+  network 192.168.254.12 0.0.0.3
+ default-route-advertise always
+
+ssh user admin authentication-type password
+return
+save

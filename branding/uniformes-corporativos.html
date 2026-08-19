@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identidad Corporativa & Uniformes — SERVIDOM S.A. (Empresa 3)</title>
+  <style>
+    :root {
+      --primary: #002B66;
+      --secondary: #0077FE;
+      --gold: #FFB300;
+      --dark: #1E293B;
+      --light: #F8FAFC;
+      --border: #E2E8F0;
+      --card-shadow: 0 10px 25px -5px rgba(0, 43, 102, 0.1), 0 8px 10px -6px rgba(0, 43, 102, 0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--light); color: var(--dark); line-height: 1.6; padding: 30px 15px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 40px; }
+    .logo-badge { display: inline-block; background: white; padding: 15px 30px; border-radius: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px; border-left: 6px solid var(--gold); }
+    h1 { color: var(--primary); font-size: 2.2rem; font-weight: 800; }
+    p.subtitle { color: #64748B; font-size: 1.1rem; margin-top: 5px; }
+    
+    .grid-section { margin-bottom: 50px; }
+    .section-title { font-size: 1.5rem; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+    .section-title span { background: var(--secondary); color: white; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+
+    /* Uniforms layout */
+    .uniform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+    .uniform-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border); transition: transform 0.3s ease; }
+    .uniform-card:hover { transform: translateY(-5px); }
+    .uniform-header { padding: 20px; text-align: center; color: white; }
+    .uniform-header.formal { background: linear-gradient(135deg, #002B66, #001845); }
+    .uniform-header.polo { background: linear-gradient(135deg, #0052CC, #002E7A); }
+    .uniform-header.tech { background: linear-gradient(135deg, #0F172A, #334155); }
+    
+    .mockup-preview { padding: 30px 20px; text-align: center; background: #F1F5F9; position: relative; }
+    .shirt-svg { max-width: 220px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15)); }
+    .uniform-body { padding: 25px; }
+    .uniform-body h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.3rem; }
+    .feature-list { list-style: none; margin-top: 15px; }
+    .feature-list li { margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; color: #475569; }
+    .feature-list li::before { content: "✓"; color: #10B981; font-weight: bold; }
+
+    /* ID Cards Layout */
+    .badges-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 25px; }
+    .id-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border); display: flex; flex-direction: column; position: relative; }
+    .id-card-top { background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 80px; position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .id-card-top img, .id-card-top .top-logo { height: 28px; fill: white; color: white; font-weight: bold; letter-spacing: 1px; }
+    .id-card-badge-role { background: var(--gold); color: #000; font-weight: 700; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+    .id-card-avatar-wrap { text-align: center; margin-top: -45px; position: relative; z-index: 2; }
+    .avatar-circle { width: 90px; height: 90px; border-radius: 50%; border: 4px solid white; background: #E2E8F0; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--primary); font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .id-card-info { padding: 15px 25px 25px; text-align: center; flex: 1; display: flex; flex-direction: column; }
+    .id-name { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .id-matricula { color: var(--secondary); font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; }
+    .id-role-desc { font-size: 0.88rem; color: #64748B; margin-bottom: 15px; border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border); padding: 8px 0; }
+    .id-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; font-size: 0.75rem; color: #94A3B8; }
+    .qr-box { width: 45px; height: 45px; background: #0F172A; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.6rem; }
+    .badge-chip { width: 35px; height: 26px; background: linear-gradient(135deg, #FFD700, #DAA520); border-radius: 4px; border: 1px solid #B8860B; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-badge">
+      <h1 style="letter-spacing: -0.5px;">SERVI<span style="color:#0077FE;">DOM</span> <span style="font-size:1.1rem; vertical-align:middle; background:#FFB300; color:#000; padding:4px 12px; border-radius:12px; margin-left:10px;">EMPRESA 3</span></h1>
+      <p style="font-size:0.9rem; color:#005299; font-weight:600; margin-top:5px;">DOMINICANA DE SERVICIOS &amp; COMERCIO S.A.</p>
+    </div>
+    <p class="subtitle">Manual de Uniformes Corporativos &amp; Credenciales Oficiales de Ingeniería (ITLA TI-203)</p>
+  </header>
+
+  <!-- SECCIÓN 1: UNIFORMES -->
+  <section class="grid-section">
+    <h2 class="section-title"><span>1</span> Modelos de Uniformes Oficiales de la Empresa 3</h2>
+    <div class="uniform-grid">
+      
+      <!-- UNIFORME FORMAL (DEFENSA) -->
+      <div class="uniform-card">
+        <div class="uniform-header formal">
+          <h2>Camisa Formal Ejecutiva</h2>
+          <p>Presentación Presencial &amp; Directiva</p>
+        </div>
+        <div class="mockup-preview">
+          <!-- SVG Camisa Ejecutiva -->
+          <svg class="shirt-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40,50 L80,20 L120,20 L160,50 L145,90 L130,85 L130,185 L70,185 L70,85 L55,90 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+            <!-- Cuello -->
+            <polygon points="80,20 100,60 120,20 100,35" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5"/>
+            <!-- Botonera central -->
+            <line x1="100" y1="60" x2="100" y2="185" stroke="#94A3B8" stroke-width="2" stroke-dasharray="2,6"/>
+            <!-- Bolsillo con bordado SERVIDOM -->
+            <rect x="75" y="85" width="22" height="26" rx="2" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+            <text x="86" y="98" font-size="5" font-weight="bold" fill="#002B66" text-anchor="middle">SERVIDOM</text>
+            <!-- Corbata Formal Azul Marino -->
+            <polygon points="96,55 104,55 106,120 100,135 94,120" fill="#002B66"/>
+          </svg>
+        </div>
+        <div class="uniform-body">
+          <h3>Código Formal de Defensa</h3>
+          <p>Uso obligatorio para la defensa presencial ante el cuerpo docente y visitas directivas de CECOMPE.</p>
+          <ul class="feature-list">
+            <li>Camisa de vestir blanca de corte italiano</li>
+            <li>Corbata azul marino satinada con sutil detalle dorado</li>
+            <li>Logotipo bordado en alta definición en bolsillo frontal</li>
+            <li>Pantalón formal negro / azul oxford y calzado pulido</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- POLO INGENIERÍA Y REDES -->
+      <div class="uniform-card">
+        <div class="uniform-header polo">
+          <h2>Polo Shirt de Ingeniería</h2>
+          <p>Operaciones de Red &amp; Soporte NOC</p>
+        </div>
+        <div class="mockup-preview">
+          <!-- SVG Polo Ingenieria -->
+          <svg class="shirt-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40,50 L80,25 L120,25 L160,50 L145,95 L125,85 L125,185 L75,185 L75,85 L55,95 Z" fill="#002B66" stroke="#001845" stroke-width="2"/>
+            <!-- Cuello dorado con ribete -->
+            <polygon points="80,25 100,65 120,25 100,38" fill="#FFB300" stroke="#CC8E00" stroke-width="1.5"/>
+            <!-- Botonera -->
+            <rect x="96" y="38" width="8" height="35" fill="#001845"/>
+            <!-- Logo SERVIDOM dorado -->
+            <circle cx="85" cy="85" r="8" fill="#FFB300"/>
+            <text x="85" y="88" font-size="5" font-weight="900" fill="#002B66" text-anchor="middle">SD3</text>
+            <!-- Detalle manga -->
+            <rect x="42" y="82" width="13" height="4" fill="#FFB300"/>
+            <rect x="145" y="82" width="13" height="4" fill="#FFB300"/>
+          </svg>
+        </div>
+        <div class="uniform-body">
+          <h3>Polo Operativo de Campo</h3>
+          <p>Indumentaria de trabajo para ingenieros en Sites de Telecomunicaciones y Call Centers.</p>
+          <ul class="feature-list">
+            <li>Tejido Piqué 100% transpirable y antiestático</li>
+            <li>Color institucional Azul Noche con ribetes Dorados</li>
+            <li>Bordado frontal: Isotipo SERVIDOM S.A.</li>
+            <li>Insignia en manga: "HUAWEI ENTERPRISE NETWORKS"</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: CARNETS / GAFETES -->
+  <section class="grid-section">
+    <h2 class="section-title"><span>2</span> Credenciales Oficiales del Equipo de Ingeniería (Empresa 3)</h2>
+    <div class="badges-grid">
+      
+      <!-- 1. Cristopher Navarro -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">DIRECTIVA TI</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">CN</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Cristopher Navarro</h3>
+          <p class="id-matricula">Matrícula: 2025-0720</p>
+          <p class="id-role-desc">Director General de TI &amp; Arquitecto de Plataformas Web Corporativas</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>SERVIDOM HEADQUARTERS</span>
+            <div class="qr-box">QR:0720</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Justin Luciano -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">FINANZAS &amp; WEB</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">JL</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Justin Luciano</h3>
+          <p class="id-matricula">Matrícula: 2025-0054</p>
+          <p class="id-role-desc">Coordinador de Servicios Digitales, Call Center &amp; Presupuesto de Infraestructura</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>SERVIDOM HEADQUARTERS</span>
+            <div class="qr-box">QR:0054</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Sayid Cabral -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">ARQUITECTURA</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">SC</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Sayid Cabral</h3>
+          <p class="id-matricula">Matrícula: 2025-1364</p>
+          <p class="id-role-desc">Ingeniero de Soluciones de Infraestructura &amp; Enlace Técnico CECOMPE</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>CECOMPE LIAISON</span>
+            <div class="qr-box">QR:1364</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Gregory Morel -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">CORE NETWORK</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">GM</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Gregory Morel</h3>
+          <p class="id-matricula">Matrícula: 2025-0035</p>
+          <p class="id-role-desc">Especialista en Conmutación L2/L3 &amp; Redundancia VRRP / RSTP (Santo Domingo)</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>SANTO DOMINGO SITE</span>
+            <div class="qr-box">QR:0035</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Yadhier López -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">DATACENTER</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">YL</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Yadhier López</h3>
+          <p class="id-matricula">Matrícula: 2025-1365</p>
+          <p class="id-role-desc">Administrador de Servicios de Centro de Datos &amp; Linux (DNS, Web, RADIUS, Mail)</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>SANTIAGO DATACENTER</span>
+            <div class="qr-box">QR:1365</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Enmanuel Mendez -->
+      <div class="id-card">
+        <div class="id-card-top">
+          <span class="top-logo">SERVIDOM</span>
+          <span class="id-card-badge-role">WAN &amp; SECURITY</span>
+        </div>
+        <div class="id-card-avatar-wrap">
+          <div class="avatar-circle">EM</div>
+        </div>
+        <div class="id-card-info">
+          <h3 class="id-name">Enmanuel Mendez</h3>
+          <p class="id-matricula">Matrícula: 2025-0753</p>
+          <p class="id-role-desc">Especialista en Enrutamiento WAN OSPF, VPN IPsec Dinámica &amp; Hardening Huawei</p>
+          <div class="id-footer">
+            <div class="badge-chip"></div>
+            <span>LA ROMANA HUB</span>
+            <div class="qr-box">QR:0753</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

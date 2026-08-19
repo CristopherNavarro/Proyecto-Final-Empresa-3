@@ -1,0 +1,82 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: SW8 (Switch de Distribución L3 — La Romana)
+! Función: Gateway L3 de VLANs Romana, DHCP Relay hacia R12, OSPF Área 3
+! ==============================================================================
+
+system-view
+sysname SW8
+
+vlan batch 10 20 30 999
+
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+rsa local-key-pair create
+stelnet server enable
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+dhcp enable
+
+# --- UPLINK ROUTED PORT HACIA ROUTER R12 ---
+interface GigabitEthernet0/0/0
+ description Uplink-Routed-Hacia-R12
+ undo portswitch
+ ip address 192.168.254.18 255.255.255.252
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+# --- GATEWAYS DE LAS VLANS DE LA ROMANA CON DHCP RELAY ---
+interface Vlanif10
+ description Depto1-CallCenter-Inbound-Gateway
+ ip address 192.168.20.1 255.255.255.192
+ dhcp select relay
+ dhcp relay server-ip 192.168.254.2
+
+interface Vlanif30
+ description Depto3-Estadistica-Gateway
+ ip address 192.168.20.65 255.255.255.240
+ dhcp select relay
+ dhcp relay server-ip 192.168.254.2
+
+interface Vlanif20
+ description Depto2-Televentas-Gateway
+ ip address 192.168.20.129 255.255.255.128
+ dhcp select relay
+ dhcp relay server-ip 192.168.254.2
+
+# --- DOWNLINK TRUNK HACIA SWITCH DE ACCESO SW9 ---
+interface GigabitEthernet1/0/0
+ description Downlink-Hacia-SW9-Acceso-CallCenter
+ port link-type trunk
+ port trunk allow-pass vlan 10 20 30
+ port trunk pvid vlan 999
+ stp bpdu-protection
+
+# --- SEGURIDAD DE CAPA 2 ---
+stp mode rstp
+stp priority 4096
+dhcp snooping enable
+vlan 10
+ dhcp snooping enable
+vlan 20
+ dhcp snooping enable
+vlan 30
+ dhcp snooping enable
+arp anti-attack check user-bind enable
+
+# --- ENRUTAMIENTO DINÁMICO OSPF (ÁREA 3 LA ROMANA) ---
+ospf 1 router-id 192.168.20.1
+ area 0.0.0.3
+  network 192.168.254.16 0.0.0.3
+  network 192.168.20.0 0.0.0.255
+ silent-interface Vlanif10
+ silent-interface Vlanif20
+ silent-interface Vlanif30
+
+ssh user admin authentication-type password
+return
+save

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0052CC" />
+      <stop offset="50%" stop-color="#002E7A" />
+      <stop offset="100%" stop-color="#001845" />
+    </linearGradient>
+    <linearGradient id="gradAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2FF" />
+      <stop offset="100%" stop-color="#0077FE" />
+    </linearGradient>
+    <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB300" />
+      <stop offset="100%" stop-color="#FF8F00" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="240" rx="16" fill="#FFFFFF" />
+  
+  <g transform="translate(40, 20)">
+    <polygon points="100,10 180,55 180,145 100,190 20,145 20,55" fill="url(#gradPrimary)" filter="url(#shadow)" />
+    <path d="M60,65 L100,100 L140,65 M100,100 L100,150 M60,135 L100,100 L140,135" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+    <circle cx="100" cy="100" r="22" fill="url(#gradAccent)" filter="url(#shadow)"/>
+    <path d="M92,95 L108,95 M105,91 L109,95 L105,99" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M108,105 L92,105 M95,101 L91,105 L95,109" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="100" cy="35" r="12" fill="url(#gradGold)" filter="url(#shadow)"/>
+    <text x="100" y="39" font-family="'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SD</text>
+    <circle cx="45" cy="130" r="11" fill="url(#gradAccent)" filter="url(#shadow)"/>
+    <text x="45" y="134" font-family="'Segoe UI', Roboto, sans-serif" font-size="8" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ST</text>
+    <circle cx="155" cy="130" r="11" fill="url(#gradAccent)" filter="url(#shadow)"/>
+    <text x="155" y="134" font-family="'Segoe UI', Roboto, sans-serif" font-size="8" font-weight="bold" fill="#FFFFFF" text-anchor="middle">LR</text>
+    <circle cx="100" cy="100" r="32" fill="none" stroke="#00D2FF" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.8"/>
+  </g>
+
+  <g transform="translate(250, 45)">
+    <text x="0" y="55" font-family="'Segoe UI', 'Montserrat', Helvetica, sans-serif" font-size="52" font-weight="900" fill="#002B66" letter-spacing="-1">
+      SERVI<tspan fill="#0077FE">DOM</tspan>
+    </text>
+    
+    <rect x="330" y="20" width="160" height="32" rx="16" fill="url(#gradGold)" filter="url(#shadow)"/>
+    <text x="410" y="42" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">
+      EMPRESA 3
+    </text>
+
+    <text x="2" y="90" font-family="'Segoe UI', 'Open Sans', sans-serif" font-size="16" font-weight="700" fill="#005299" letter-spacing="3">
+      DOMINICANA DE SERVICIOS &amp; COMERCIO S.A.
+    </text>
+
+    <text x="2" y="120" font-family="'Segoe UI', 'Open Sans', sans-serif" font-size="12" font-weight="600" fill="#667085" letter-spacing="1">
+      CALL CENTER &bull; VENTAS DIRECTAS &bull; E-COMMERCE &bull; INFRAESTRUCTURA DE RED
+    </text>
+
+    <text x="2" y="148" font-family="'Segoe UI', sans-serif" font-size="11" font-style="italic" fill="#8898AA">
+      "Conectando a la República Dominicana con tecnología de red de clase mundial"
+    </text>
+  </g>
+</svg>

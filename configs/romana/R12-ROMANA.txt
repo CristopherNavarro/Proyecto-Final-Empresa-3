@@ -1,0 +1,95 @@
+! ==============================================================================
+! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
+! Dispositivo: R12 (Router de Sucursal La Romana)
+! Función: Gateway WAN, OSPF Área 0 y 3, Servidor DHCP Central, Spoke VPN IPsec
+! ==============================================================================
+
+system-view
+sysname R12
+
+aaa
+ local-user admin password irreversible-cipher Admin@2026!
+ local-user admin service-type ssh
+ local-user admin privilege level 15
+rsa local-key-pair create
+stelnet server enable
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+ idle-timeout 10 0
+
+dhcp enable
+
+# --- INTERFAZ LOOPBACK ---
+interface LoopBack0
+ description Router-ID OSPF La Romana
+ ip address 192.168.255.2 255.255.255.255
+
+# --- INTERFACES WAN Y PTP ---
+interface GigabitEthernet0/0/0
+ description WAN-NUBE-Backbone-Area0
+ ip address 192.168.254.2 255.255.255.248
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+interface GigabitEthernet0/0/1
+ description PTP-Hacia-SW8-Distribucion-Romana
+ ip address 192.168.254.17 255.255.255.252
+ ospf authentication-mode md5 1 cipher Huawei@123
+
+# --- ASIGNACIÓN DINÁMICA DE DIRECCIONAMIENTO DESDE EL ROUTER (DHCP POOLS) ---
+ip pool DEPTO1-CALLCENTER-ROMANA
+ network 192.168.20.0 mask 255.255.255.192
+ gateway-list 192.168.20.1
+ dns-list 192.168.10.66
+ excluded-ip-address 192.168.20.1 192.168.20.5
+
+ip pool DEPTO3-ESTADISTICA-ROMANA
+ network 192.168.20.64 mask 255.255.255.240
+ gateway-list 192.168.20.65
+ dns-list 192.168.10.66
+ excluded-ip-address 192.168.20.65 192.168.20.66
+
+ip pool DEPTO2-TELEVENTAS-ROMANA
+ network 192.168.20.128 mask 255.255.255.128
+ gateway-list 192.168.20.129
+ dns-list 192.168.10.66
+ excluded-ip-address 192.168.20.129 192.168.20.135
+
+# --- VPN IPSEC DINÁMICA (SPOKE LA ROMANA <-> SANTO DOMINGO) ---
+acl number 3101
+ description TRAFICO-INTERESANTE-VPN-ROMANA-SD
+ rule 5 permit ip source 192.168.20.0 0.0.0.255 destination 192.168.0.0 0.0.3.255
+
+ike proposal 1
+ encryption-algorithm aes-256
+ authentication-algorithm sha2-256
+ dh group14
+
+ike peer SANTODOMINGO
+ ike-proposal 1
+ pre-shared-key cipher ServidomEmpresa3@2026!
+ remote-address 192.168.254.1
+
+ipsec proposal PROP1
+ esp authentication-algorithm sha2-256
+ esp encryption-algorithm aes-256
+
+ipsec policy POL-SD 10 isakmp
+ security acl 3101
+ ike-peer SANTODOMINGO
+ proposal PROP1
+
+interface GigabitEthernet0/0/0
+ ipsec policy POL-SD
+
+# --- ENRUTAMIENTO DINÁMICO OSPF (ÁREA 0 Y ÁREA 3) ---
+ospf 1 router-id 192.168.255.2
+ area 0.0.0.0
+  network 192.168.254.0 0.0.0.7
+  network 192.168.255.2 0.0.0.0
+ area 0.0.0.3
+  network 192.168.254.16 0.0.0.3
+
+ssh user admin authentication-type password
+return
+save
