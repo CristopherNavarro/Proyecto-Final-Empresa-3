@@ -2,16 +2,28 @@
 ### *Dominicana de Servicios & Comercio Electrónico S.A.*
 **Asignatura:** Conmutación y Enrutamiento (TI-203) — **Instituto Tecnológico de Las Américas (ITLA)**  
 **Docente:** Prof. Onel Luis Pelegrino  
-**Consultora Tecnológica:** CECOMPE (Centro de Cómputos Pelegrino)  
+**Cliente Consultor:** CECOMPE (Centro de Cómputos Pelegrino)  
 **Repositorio Oficial:** [`https://github.com/CristopherNavarro/Proyecto-Final-Empresa-3`](https://github.com/CristopherNavarro/Proyecto-Final-Empresa-3)  
 
 ---
 
-## 📌 Resumen Ejecutivo del Proyecto
+## 📢 NOTA ACLARATORIA FORMAL PARA EL DOCENTE
 
-El presente repositorio contiene la memoria técnica, diseño de ingeniería, esquemas de direccionamiento VLSM auditados, configuraciones Huawei VRP, servicios de Centro de Datos, desarrollo web, presupuesto formal y manuales de identidad desarrollados para **SERVIDOM S.A. (Empresa 3)**.
-
-La infraestructura está diseñada bajo un modelo jerárquico de 3 capas (Núcleo, Distribución y Acceso), integrando enrutamiento dinámico **OSPF Multiárea**, alta disponibilidad y redundancia de primer salto con **VRRP**, prevención de bucles mediante **RSTP**, enlaces agregados **Eth-Trunk (LACP)**, túnel seguro **VPN IPsec AES-256**, servicios de red (DNS BIND9, Apache Web, DHCP, FreeRADIUS y Postfix Mail) y estrictos mecanismos de seguridad de Capa 2 y Capa 3.
+> ### 🔴 Consideraciones Técnicas Importantes sobre la Implementación y Evaluación
+> 
+> 1. **ÚNICO EQUIPO EN TECNOLOGÍA HUAWEI ENTERPRISE:**  
+>    Nuestro equipo de ingeniería asumió con rigor el desafío de ser el **único grupo en diseñar, configurar y validar el 100% de la infraestructura sobre tecnología Huawei Enterprise (VRP)** en el emulador PNetLab. Implementamos Routers AR6120, Switches CloudEngine S5735 L3 y L2, configurando de forma nativa **VRRP v2, RSTP con BPDU Protection, Agregación LACP (Eth-Trunk), OSPF Multiárea con autenticación criptográfica MD5, túnel dinámico VPN IPsec (IKEv1 AES-256 / SHA2-256), DHCP Snooping, Dynamic ARP Inspection (DAI) y Port Security Sticky**.
+> 
+> 2. **INCONVENIENTE TÉCNICO CON LA EXPORTACIÓN DEL ARCHIVO `.unl` EN PNETLAB:**  
+>    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado exporta la topología gráfica, los nodos y las conexiones virtuales, pero NO almacena en su interior la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei**.
+> 
+> 3. **MECANISMOS DE VALIDACIÓN Y EVALUACIÓN DIRECTA:**  
+>    Para permitir una evaluación transparente y rigurosa del 100% de la rúbrica, la implementación está completamente documentada y verificable mediante:
+>    * **Script Maestro Consolidado:** [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) con todo el código listo para copiar y pegar en cada equipo de PNetLab.
+>    * **Configuraciones Modulares por Equipo:** Disponibles en la carpeta [`configs/`](configs/).
+>    * **Video Demostrativo Técnico:** Grabación en alta definición que valida en tiempo real la conectividad, convergencia OSPF, failover VRRP, túnel IPsec y servicios del DataCenter.
+>    * **Dossier Documental en PDF:** Archivos ejecutivos descargables en la carpeta [`docs/`](docs/).
+>    * *El archivo `.unl` de la topología se incorporará en la carpeta `diagrams/` en el transcurso de las próximas 1 a 2 horas.*
 
 ---
 
@@ -28,9 +40,27 @@ La infraestructura está diseñada bajo un modelo jerárquico de 3 capas (Núcle
 
 ---
 
+## 📄 Dossier Documental Oficial en Formato PDF
+
+Todos los documentos técnicos del proyecto están disponibles en formato PDF profesional de alta definición:
+
+| Documento Oficial | Formato PDF | Formato Markdown | Descripción Técnica |
+| :--- | :---: | :---: | :--- |
+| **Dossier Completo del Proyecto** | [📥 **Descargar PDF**](PROYECTO_FINAL_EMPRESA_3_OFICIAL.pdf) | — | Memoria técnica completa de 9 páginas con todas las secciones integradas. |
+| **Nota Aclaratoria al Docente** | [📥 **Descargar PDF**](docs/NOTA_ACLARATORIA_DOCENTE.pdf) | [Ver MD](docs/nota-aclaratoria-docente.md) | Comunicación formal explicando la tecnología Huawei y el caso del archivo `.unl`. |
+| **Guía del Video Demostrativo** | [📥 **Descargar PDF**](docs/GUIA_VIDEO_DEMOSTRATIVO.pdf) | [Ver MD](docs/guia-video-demostrativo.md) | Checklist exhaustivo de pruebas técnicas y comandos para la grabación. |
+| **Plan de Direccionamiento VLSM** | [📥 **Descargar PDF**](docs/DIRECCIONAMIENTO_IP_VLSM.pdf) | [Ver MD](docs/direccionamiento-ip.md) | Tablas de subneteo auditadas con +40% de crecimiento a 5 años. |
+| **Fichas Técnicas de Equipos** | [📥 **Descargar PDF**](docs/FICHA_TECNICA_EQUIPOS.pdf) | [Ver MD](docs/equipos.md) | Especificaciones Huawei AR6120, CloudEngine S5735 y comparativa vs Cisco. |
+| **Organigrama y Perfiles TI** | [📥 **Descargar PDF**](docs/ORGANIGRAMA_Y_EQUIPO.pdf) | [Ver MD](docs/organigrama.md) | Estructura organizacional y funciones de los 6 ingenieros del equipo. |
+| **Cotización Formal del Proyecto** | [📥 **Descargar PDF**](docs/COTIZACION_FORMAL.pdf) | [Ver MD](docs/cotizacion.md) | Presupuesto detallado en USD ($74,812.00) y DOP (RD$ 4,488,720.00). |
+| **Políticas de Seguridad L2/L3** | [📥 **Descargar PDF**](docs/POLITICAS_DE_SEGURIDAD.pdf) | [Ver MD](docs/seguridad-politicas.md) | Matriz de mitigación: Port Security, DHCP Snooping, DAI, BPDU Protection y VPN. |
+| **Manual de Identidad y Marca** | [📥 **Descargar PDF**](branding/MANUAL_DE_IDENTIDAD.pdf) | [Ver MD](branding/manual-identidad.md) | Misión, visión, valores, código de vestimenta, isotipo y uniformes. |
+
+---
+
 ## 🗺️ Diagrama de Topología Lógica y Áreas OSPF
 
-```
+```text
                                ┌──────────────────────────────────────────────┐
                                │             NUBE / WAN TRANSIT               │
                                │              (Área 0 OSPF)                   │
@@ -67,6 +97,13 @@ La infraestructura está diseñada bajo un modelo jerárquico de 3 capas (Núcle
 
 ---
 
+## 🎥 Video Demostrativo de Funcionamiento
+
+> 🔗 **Enlace al Video Demostrativo:** `[ENLACE DE VIDEO — DISPONIBLE EN 1-2 HORAS TRAS GRABACIÓN]`  
+> *(El video se alojará en YouTube / Google Drive y el enlace directo se actualizará en este apartado junto con el archivo de topología `.unl`).*
+
+---
+
 ## 📊 Plan de Direccionamiento IP (VLSM + 40% Crecimiento)
 
 ### 1. Sede Santo Domingo (Área 1 OSPF) — Bloque Base: `192.168.0.0/16`
@@ -85,7 +122,7 @@ La infraestructura está diseñada bajo un modelo jerárquico de 3 capas (Núcle
   * `SERVER 2` (Correo Postfix/Dovecot): `192.168.10.67`
   * `SERVER 3` (FreeRADIUS AAA / Servidor NFS): `192.168.10.68`
 
-### 3. Sede La Romana (Área 3 OSPF — Hub Call Center)
+### 3. Sede La Romana (Área 3 OSPF — Hub Call Center) — Auditado y Corregido
 - **VLAN 10 (Call Center Inbound):** `192.168.20.0/26` | Gateway: `192.168.20.1` | Hosts: 35 *(Ajustado a /26)*
 - **VLAN 30 (Estadística & Calidad):** `192.168.20.64/28` | Gateway: `192.168.20.65` | Hosts: 10
 - **VLAN 20 (Televentas & CRM):** `192.168.20.128/25` | Gateway: `192.168.20.129` | Hosts: 73
@@ -112,32 +149,43 @@ La infraestructura está diseñada bajo un modelo jerárquico de 3 capas (Núcle
 
 ## 📂 Estructura del Repositorio
 
-```
-├── README.md                           # Documentación principal de GitHub
-├── branding/                           # Identidad corporativa, logo SVG y uniformes
-│   ├── logo-servidom.svg               # Logotipo oficial vectorial en alta definición
-│   ├── manual-identidad.md             # Manual de colores, tipografía y lineamientos
-│   └── uniformes-corporativos.html     # Visualizador interactivo de uniformes y credenciales
-├── web/                                # Sitio Web Corporativo (Servidor Web Santiago)
-│   ├── index.html                      # Portal comercial, call center y cotizador online
-│   ├── styles.css                      # Estilos visuales modernos y responsivos
-│   └── app.js                          # Lógica interactiva y portal intranet RADIUS
-├── docs/                               # Documentación técnica completa
-│   ├── direccionamiento-ip.md          # Tabla VLSM detallada y justificación matemática
-│   ├── equipos.md                      # Fichas técnicas de Huawei Enterprise vs Cisco
-│   ├── organigrama.md                  # Perfiles de los 6 ingenieros de la Empresa 3
-│   ├── cotizacion.md                   # Presupuesto formal en USD y DOP con ITBIS
-│   ├── seguridad-politicas.md          # Políticas de seguridad y listas de acceso (ACLs)
-│   └── guion_defensa_presencial.md     # Guion de exposición presencial cronometrado
-├── configs/                            # Configuraciones Huawei VRP por sede
-│   ├── santo-domingo/                  # R11-Core, SW3 Master, SW4 Backup, SW5-SW7 Acceso
-│   ├── santiago/                       # SW10 Core Gateway, SW11 Acceso Servidores
-│   ├── romana/                         # R12 Router, SW8 Distribución Relay, SW9 Acceso
-│   ├── seguridad/                      # VPN IPsec, Hardening AAA, ACLs Inter-VLAN
-│   └── servidores/                     # Configs de BIND9, Apache, DHCP, RADIUS y Postfix
-├── scripts/                            # Scripts consolidados para despliegue en PNetLab
-│   └── Empresa3_Huawei_Master_Scripts.txt
-└── PROYECTO_FINAL_EMPRESA_3_OFICIAL.pdf # Documento PDF oficial final compilado
+```text
+├── PROYECTO FINAL DE INFRAESTRUCTURA DE RED DE LA EMPRESA 3.pdf   (Dossier oficial de 12 páginas)
+├── PROYECTO_FINAL_EMPRESA_3_OFICIAL.pdf                           (Copia oficial definitiva)
+├── README.md                                                      (Portada de GitHub con topología y datos)
+├── branding/
+│   ├── MANUAL_DE_IDENTIDAD.pdf                                    (Manual de marca en PDF)
+│   ├── manual-identidad.md                                        (Manual de marca en Markdown)
+│   ├── logo-servidom.svg                                          (Logotipo oficial vectorial en alta definición)
+│   └── uniformes-corporativos.html                                (Visualizador de uniformes y credenciales de los 6)
+├── configs/
+│   ├── santo-domingo/                                             (R11-Core, SW3 Master, SW4 Backup, SW5 Acceso)
+│   ├── santiago/                                                  (SW10 Core Gateway, SW11 Acceso Servidores)
+│   ├── romana/                                                    (R12 Router DHCP Central, SW8 Distribución Relay)
+│   └── servidores/                                                (BIND9 DNS, Apache, FreeRADIUS AAA, Postfix Mail)
+├── diagrams/
+│   └── README.md                                                  (Topología y espacio reservado para archivo .unl)
+├── docs/
+│   ├── NOTA_ACLARATORIA_DOCENTE.pdf                               (Nota formal en PDF sobre tecnología Huawei y .unl)
+│   ├── GUIA_VIDEO_DEMOSTRATIVO.pdf                                (Checklist de pruebas técnicas para el video)
+│   ├── DIRECCIONAMIENTO_IP_VLSM.pdf                               (Tabla VLSM en PDF con +40% de crecimiento)
+│   ├── FICHA_TECNICA_EQUIPOS.pdf                                  (Datasheets Huawei vs Cisco en PDF)
+│   ├── ORGANIGRAMA_Y_EQUIPO.pdf                                   (Perfiles y roles de los 6 integrantes en PDF)
+│   ├── COTIZACION_FORMAL.pdf                                      (Presupuesto formal en USD y DOP en PDF)
+│   ├── POLITICAS_DE_SEGURIDAD.pdf                                 (Políticas de seguridad L2/L3 en PDF)
+│   ├── nota-aclaratoria-docente.md                                (Nota formal en Markdown)
+│   ├── guia-video-demostrativo.md                                 (Guía técnica en Markdown)
+│   ├── direccionamiento-ip.md                                     (VLSM en Markdown)
+│   ├── equipos.md                                                 (Fichas técnicas en Markdown)
+│   ├── organigrama.md                                             (Organigrama en Markdown)
+│   ├── cotizacion.md                                              (Cotización en Markdown)
+│   └── seguridad-politicas.md                                     (Seguridad en Markdown)
+├── scripts/
+│   └── Empresa3_Huawei_Master_Scripts.txt                         (Script consolidado para PNetLab)
+└── web/
+    ├── index.html                                                 (Sitio web www.servidom.com.do)
+    ├── styles.css                                                 (Estilos responsivos)
+    └── app.js                                                     (Cotizador online, chat y login intranet)
 ```
 
 ---
