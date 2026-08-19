@@ -17,10 +17,11 @@
 > 2. **INCONVENIENTE TÉCNICO CON LA EXPORTACIÓN DEL ARCHIVO `.unl` EN PNETLAB:**  
 >    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado (`.unl`) exporta la topología gráfica, los nodos y las conexiones virtuales, pero la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei se gestiona en el almacenamiento temporal del host de virtualización**.
 > 
-> 3. **MÉTODOS DE EVALUACIÓN Y VALIDACIÓN RÁPIDA DISPONIBLES PARA EL DOCENTE:**
->    * **Opción A (Revisión Rápida de Código):** Puede consultar directamente el archivo consolidado [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) o los archivos modulares en [`configs/`](configs/) para verificar la sintaxis, direccionamiento, parámetros de seguridad y lógica de enrutamiento.
->    * **Opción B (Carga y Replicación Interactiva en PNetLab):** Puede importar el archivo de topología oficial [`diagrams/LABORATORIO SIMULADO.unl`](diagrams/LABORATORIO%20SIMULADO.unl), encender los nodos y copiar/pegar los bloques de configuración de cada equipo para observar la convergencia completa en vivo (OSPF Full, VRRP Master/Backup, RSTP Root, Eth-Trunk LACP, IPsec VPN y DHCP Relay).
->    * **Opción C (Dossier Documental en PDF):** Toda la memoria técnica, cálculos VLSM (+40%), organigrama, fichas técnicas y presupuesto formal están disponibles en la carpeta [`docs/`](docs/).
+> 3. **MÉTODOS DE EVALUACIÓN Y VALIDACIÓN DISPONIBLES PARA EL DOCENTE:**
+>    * **Opción A (Video Demostrativo en Vivo):** Puede reproducir o descargar directamente el [🎬 **Video Demostrativo Oficial de la Topología**](https://github.com/CristopherNavarro/Proyecto-Final-Empresa-3/releases/download/v1.0.0/Video_Demostrativo_Topologia_Huawei_Empresa3.mp4) alojado en alta definición en la sección de Releases.
+>    * **Opción B (Revisión de Código y Scripts):** Puede consultar el archivo consolidado [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) o los archivos modulares en [`configs/`](configs/) para verificar la sintaxis, direccionamiento, parámetros de seguridad y lógica de enrutamiento.
+>    * **Opción C (Carga y Replicación Interactiva en PNetLab):** Puede importar el archivo de topología oficial [`diagrams/LABORATORIO SIMULADO.unl`](diagrams/LABORATORIO%20SIMULADO.unl), encender los nodos y copiar/pegar los bloques de configuración de cada equipo para observar la convergencia completa en vivo (OSPF Full, VRRP Master/Backup, RSTP Root, Eth-Trunk LACP, IPsec VPN y DHCP Relay).
+>    * **Opción D (Dossier Documental en PDF):** Toda la memoria técnica, cálculos VLSM (+40%), organigrama, fichas técnicas y presupuesto formal están disponibles en la carpeta [`docs/`](docs/).
 
 ---
 
@@ -34,6 +35,13 @@
 | **Gregory Morel** | `2025-0035` | Especialista en Conmutación LAN | Sede Santo Domingo (VRRP Maestro/Respaldo, RSTP, Eth-Trunk) |
 | **Yadhier López** | `2025-1365` | Administrador de DataCenter & Linux | Sede Santiago (Centro de Datos, Servidores DNS/Web/RADIUS/Mail) |
 | **Enmanuel Mendez** | `2025-0753` | Especialista en Redes WAN & VPN | Sede La Romana (Router R12, DHCP Central, Túnel VPN IPsec) |
+
+---
+
+## 🎥 Video Demostrativo Oficial de la Red
+
+🎬 **Enlace Directo al Video:** [**Reproducir / Descargar Video Demostrativo MP4 (160 MB en Alta Definición)**](https://github.com/CristopherNavarro/Proyecto-Final-Empresa-3/releases/download/v1.0.0/Video_Demostrativo_Topologia_Huawei_Empresa3.mp4)  
+*(Evidencia el encendido de los 15 nodos, estado Up/Up de interfaces, adyacencias OSPF Full, redundancia VRRP, túnel VPN IPsec AES-256, DHCP y pruebas de ping con 100% de éxito).*
 
 ---
 
@@ -166,7 +174,7 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 │   └── servidores/                                                (BIND9 DNS, Apache, FreeRADIUS AAA, Postfix Mail)
 ├── diagrams/
 │   ├── LABORATORIO SIMULADO.unl                                   (Topología oficial exportada de PNetLab)
-│   └── README.md                                                  (Memoria de topología y mapeo de enlaces)
+│   └── README.md                                                  (Instrucciones de importación y mapeo)
 ├── docs/
 │   ├── NOTA_ACLARATORIA_DOCENTE.pdf                               (Nota formal en PDF sobre tecnología Huawei y .unl)
 │   ├── DIRECCIONAMIENTO_IP_VLSM.pdf                               (Tabla VLSM en PDF con +40% de crecimiento)
@@ -182,6 +190,8 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 │   └── seguridad-politicas.md                                     (Seguridad en Markdown)
 ├── scripts/
 │   └── Empresa3_Huawei_Master_Scripts.txt                         (Script consolidado para PNetLab)
+├── video/
+│   └── README.md                                                  (Enlace oficial de descarga del video en Releases)
 └── web/
     ├── index.html                                                 (Sitio web www.servidom.com.do)
     ├── styles.css                                                 (Estilos responsivos)
