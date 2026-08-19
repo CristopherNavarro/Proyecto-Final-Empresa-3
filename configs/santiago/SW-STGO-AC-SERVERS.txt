@@ -35,7 +35,7 @@ interface GigabitEthernet1/0/1
 
 # --- PUERTOS DE ACCESO DEDICADOS PARA SERVIDORES DE DATACENTER ---
 interface GigabitEthernet1/0/2
- description Servidor-SERVER3-FTP-RADIUS-NFS
+ description Servidor-SERVER3-FTP-RADIUS-NFS (192.168.10.68)
  port link-type access
  port default vlan 40
  port-security enable
@@ -46,7 +46,7 @@ interface GigabitEthernet1/0/2
  stp bpdu-protection
 
 interface GigabitEthernet1/0/3
- description Servidor-SERVER2-MAIL-Corporativo
+ description Servidor-SERVER2-MAIL-Corporativo (192.168.10.67)
  port link-type access
  port default vlan 40
  port-security enable
@@ -57,7 +57,7 @@ interface GigabitEthernet1/0/3
  stp bpdu-protection
 
 interface GigabitEthernet1/0/4
- description Servidor-SERVER1-DNS-WEB-DHCP
+ description Servidor-SERVER1-DNS-WEB-DHCP (192.168.10.66)
  port link-type access
  port default vlan 40
  port-security enable

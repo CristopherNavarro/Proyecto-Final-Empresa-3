@@ -23,13 +23,13 @@ user-interface vty 0 4
 dhcp enable
 
 # --- UPLINK ROUTED PORT HACIA ROUTER R12 ---
-interface GigabitEthernet0/0/0
+interface GigabitEthernet1/0/0
  description Uplink-Routed-Hacia-R12
  undo portswitch
  ip address 192.168.254.18 255.255.255.252
  ospf authentication-mode md5 1 cipher Huawei@123
 
-# --- GATEWAYS DE LAS VLANS DE LA ROMANA CON DHCP RELAY ---
+# --- GATEWAYS DE LAS VLANS DE LA ROMANA CON DHCP RELAY HACIA R12 ---
 interface Vlanif10
  description Depto1-CallCenter-Inbound-Gateway
  ip address 192.168.20.1 255.255.255.192
@@ -49,7 +49,7 @@ interface Vlanif20
  dhcp relay server-ip 192.168.254.2
 
 # --- DOWNLINK TRUNK HACIA SWITCH DE ACCESO SW9 ---
-interface GigabitEthernet1/0/0
+interface GigabitEthernet1/0/1
  description Downlink-Hacia-SW9-Acceso-CallCenter
  port link-type trunk
  port trunk allow-pass vlan 10 20 30

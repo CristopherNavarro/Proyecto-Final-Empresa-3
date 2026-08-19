@@ -12,16 +12,15 @@
 > ### 🔴 Consideraciones Técnicas sobre la Implementación y Evaluación
 > 
 > 1. **ÚNICO EQUIPO EN TECNOLOGÍA HUAWEI ENTERPRISE:**  
->    Nuestro equipo de ingeniería asumió con rigor el desafío de ser el **único grupo en diseñar, configurar y validar el 100% de la infraestructura sobre tecnología Huawei Enterprise (VRP)** en el emulador PNetLab. Implementamos Routers AR6120, Switches CloudEngine S5735 L3 y L2, configurando de forma nativa **VRRP v2, RSTP con BPDU Protection, Agregación LACP (Eth-Trunk), OSPF Multiárea con autenticación criptográfica MD5, túnel dinámico VPN IPsec (IKEv1 AES-256 / SHA2-256), DHCP Snooping, Dynamic ARP Inspection (DAI) y Port Security Sticky**.
+>    Nuestro equipo de ingeniería asumió con rigor el desafío de ser el **único grupo en diseñar, configurar y validar el 100% de la infraestructura sobre tecnología Huawei Enterprise (VRP)** en el emulador PNetLab. Implementamos Routers AR6120 y Switches CloudEngine S5735 L3/L2, configurando de forma nativa **VRRP v2, RSTP con BPDU Protection, Agregación LACP (Eth-Trunk), OSPF Multiárea con autenticación criptográfica MD5, túnel dinámico VPN IPsec (IKEv1 AES-256 / SHA2-256), DHCP Snooping, Dynamic ARP Inspection (DAI) y Port Security Sticky**.
 > 
 > 2. **INCONVENIENTE TÉCNICO CON LA EXPORTACIÓN DEL ARCHIVO `.unl` EN PNETLAB:**  
->    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado exporta la topología gráfica, los nodos y las conexiones virtuales, pero la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei se gestiona en el almacenamiento temporal del host de virtualización**.
+>    Tal como se expuso y debatió en las sesiones presenciales de clase, el emulador PNetLab / EVE-NG presenta una particularidad en la exportación de archivos `.unl`: **el archivo XML generado (`.unl`) exporta la topología gráfica, los nodos y las conexiones virtuales, pero la memoria NVRAM (`startup-config` / `vrpcfg.zip`) de las imágenes de dispositivos Huawei se gestiona en el almacenamiento temporal del host de virtualización**.
 > 
-> 3. **MECANISMOS DE VALIDACIÓN Y EVALUACIÓN DIRECTA:**  
->    Para permitir una evaluación transparente y rigurosa del 100% de la rúbrica, la implementación está completamente documentada y verificable mediante:
->    * **Script Maestro Consolidado:** [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) con todo el código listo para copiar y pegar en cada equipo de PNetLab.
->    * **Configuraciones Modulares por Equipo:** Disponibles en la carpeta [`configs/`](configs/).
->    * **Dossier Documental en PDF:** Archivos ejecutivos descargables en la carpeta [`docs/`](docs/).
+> 3. **MÉTODOS DE EVALUACIÓN Y VALIDACIÓN RÁPIDA DISPONIBLES PARA EL DOCENTE:**
+>    * **Opción A (Revisión Rápida de Código):** Puede consultar directamente el archivo consolidado [`scripts/Empresa3_Huawei_Master_Scripts.txt`](scripts/Empresa3_Huawei_Master_Scripts.txt) o los archivos modulares en [`configs/`](configs/) para verificar la sintaxis, direccionamiento, parámetros de seguridad y lógica de enrutamiento.
+>    * **Opción B (Carga y Replicación Interactiva en PNetLab):** Puede importar el archivo de topología oficial [`diagrams/LABORATORIO SIMULADO.unl`](diagrams/LABORATORIO%20SIMULADO.unl), encender los nodos y copiar/pegar los bloques de configuración de cada equipo para observar la convergencia completa en vivo (OSPF Full, VRRP Master/Backup, RSTP Root, Eth-Trunk LACP, IPsec VPN y DHCP Relay).
+>    * **Opción C (Dossier Documental en PDF):** Toda la memoria técnica, cálculos VLSM (+40%), organigrama, fichas técnicas y presupuesto formal están disponibles en la carpeta [`docs/`](docs/).
 
 ---
 
@@ -35,6 +34,18 @@
 | **Gregory Morel** | `2025-0035` | Especialista en Conmutación LAN | Sede Santo Domingo (VRRP Maestro/Respaldo, RSTP, Eth-Trunk) |
 | **Yadhier López** | `2025-1365` | Administrador de DataCenter & Linux | Sede Santiago (Centro de Datos, Servidores DNS/Web/RADIUS/Mail) |
 | **Enmanuel Mendez** | `2025-0753` | Especialista en Redes WAN & VPN | Sede La Romana (Router R12, DHCP Central, Túnel VPN IPsec) |
+
+---
+
+## 💻 Plataforma Web Corporativa & Servicios en Línea (`/web`)
+
+Desarrollamos el portal web corporativo interactivo de **SERVIDOM S.A.** bajo el dominio institucional `www.servidom.com.do` (alojado en la IP `192.168.10.66` de la sede Santiago):
+
+- **Catálogo de Servicios y Comercio Electrónico:** Venta de soluciones digitales y servicios directos con pasarela simulada.
+- **Módulo de Call Center Interactivo:** Simulador de chat en vivo conectado a la sucursal de La Romana.
+- **Cotizador Dinámico en Línea:** Cálculo interactivo de presupuestos según el nivel de SLA (Standard, Gold, Platinum).
+- **Portal Intranet Centralizado con Autenticación AAA:** Validado contra el servidor **FreeRADIUS** con cuentas creadas para los 6 ingenieros del equipo.
+- **Visualizador de Uniformes y Credenciales:** [`branding/uniformes-corporativos.html`](branding/uniformes-corporativos.html) con carnets oficiales y código QR.
 
 ---
 
@@ -154,7 +165,8 @@ Todos los documentos técnicos del proyecto están disponibles en formato PDF pr
 │   ├── romana/                                                    (R12 Router DHCP Central, SW8 Distribución Relay)
 │   └── servidores/                                                (BIND9 DNS, Apache, FreeRADIUS AAA, Postfix Mail)
 ├── diagrams/
-│   └── README.md                                                  (Topología y espacio reservado para archivo .unl)
+│   ├── LABORATORIO SIMULADO.unl                                   (Topología oficial exportada de PNetLab)
+│   └── README.md                                                  (Memoria de topología y mapeo de enlaces)
 ├── docs/
 │   ├── NOTA_ACLARATORIA_DOCENTE.pdf                               (Nota formal en PDF sobre tecnología Huawei y .unl)
 │   ├── DIRECCIONAMIENTO_IP_VLSM.pdf                               (Tabla VLSM en PDF con +40% de crecimiento)

@@ -7,7 +7,7 @@
 system-view
 sysname SW4
 
-# --- CREACIÓN DE VLANS ---
+# --- CREACIÓN DE VLANS CORPORATIVAS ---
 vlan batch 10 20 30 40 99 999
 
 # --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
@@ -25,7 +25,7 @@ user-interface vty 0 4
  idle-timeout 10 0
 
 # --- ENLACE ROUTED PORT HACIA ROUTER NÚCLEO R11 ---
-interface GigabitEthernet0/0/0
+interface GigabitEthernet1/0/0
  description Uplink-Routed-Hacia-R11
  undo portswitch
  ip address 192.168.254.14 255.255.255.252
@@ -62,42 +62,42 @@ interface Vlanif99
  vrrp vrid 99 virtual-ip 192.168.3.1
  vrrp vrid 99 priority 100
 
-# --- AGREGACIÓN DE ENLACES ETH-TRUNK ENTRE DISTRIBUIDORES ---
+# --- AGREGACIÓN DE ENLACES ETH-TRUNK (LACP) ENTRE DISTRIBUIDORES ---
 interface Eth-Trunk 1
- description Enlace-Troncal-Redundante-Hacia-SW3
+ description Troncal-Redundante-LACP-Hacia-SW3
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  mode lacp-static
 
+interface GigabitEthernet1/0/1
+ description Miembro-EthTrunk1-LACP
+ eth-trunk 1
+
+interface GigabitEthernet1/0/2
+ description Miembro-EthTrunk1-LACP
+ eth-trunk 1
+
 interface GigabitEthernet1/0/3
- description Miembro-EthTrunk1
- eth-trunk 1
-
-interface GigabitEthernet1/0/4
- description Miembro-EthTrunk1
- eth-trunk 1
-
-interface GigabitEthernet1/0/5
- description Miembro-EthTrunk1
+ description Miembro-EthTrunk1-LACP
  eth-trunk 1
 
 # --- DOWNLINKS TRUNK HACIA SWITCHES DE ACCESO ---
-interface GigabitEthernet1/0/0
+interface GigabitEthernet1/0/6
  description Downlink-Hacia-SW5-Acceso1
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/1
+interface GigabitEthernet1/0/4
  description Downlink-Hacia-SW6-Acceso2
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/2
+interface GigabitEthernet1/0/5
  description Downlink-Hacia-SW7-Acceso3
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99

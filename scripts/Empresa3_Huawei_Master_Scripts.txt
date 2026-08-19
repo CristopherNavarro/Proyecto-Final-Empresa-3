@@ -3,10 +3,15 @@ SERVIDOM S.A. (EMPRESA 3) — MASTER SCRIPTS HUAWEI VRP
 Proyecto Final de Conmutación y Enrutamiento (TI-203) — ITLA
 Docente: Prof. Onel Luis Pelegrino
 ================================================================================
+INSTRUCCIONES DE DESPLIEGUE EN PNETLAB:
+1. Importar el archivo 'diagrams/LABORATORIO SIMULADO.unl' en PNetLab.
+2. Iniciar los nodos de la topología.
+3. Abrir la consola de cada dispositivo y copiar/pegar el bloque correspondiente.
+4. La red convergerá automáticamente en OSPF, VRRP, RSTP, Eth-Trunk y VPN IPsec.
+================================================================================
 
 
-
-=== R11 CORE (SANTO DOMINGO) ===
+=== 1. ROUTER R11 (CORE SANTO DOMINGO) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: R11 (Router de Núcleo Santo Domingo)
@@ -16,7 +21,7 @@ Docente: Prof. Onel Luis Pelegrino
 system-view
 sysname R11
 
-# --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
+# --- GESTIÓN Y ACCESO SEGURO AAA (SSH / STELNET) ---
 aaa
  local-user admin password irreversible-cipher Admin@2026!
  local-user admin service-type ssh
@@ -33,9 +38,9 @@ user-interface vty 0 4
 user-interface console 0
  idle-timeout 10 0
 
-# --- INTERFACES LOOPBACK Y TRÁNSITO WAN ---
+# --- INTERFACES FÍSICAS, LOOPBACK Y TRÁNSITO WAN ---
 interface LoopBack0
- description Router-ID OSPF y Gestión R11
+ description Router-ID OSPF y Gestion R11
  ip address 192.168.255.1 255.255.255.255
 
 interface GigabitEthernet0/0/2
@@ -58,6 +63,7 @@ acl number 2001
  description NAT-SALIDA-INTERNET-PUBLICA
  rule 5 permit source 192.168.0.0 0.0.255.255
 
+# Interfaz virtual/física hacia nube ISP
 interface GigabitEthernet0/0/3
  description Salida-WAN-ISP-Publica
  ip address 19.0.0.1 255.255.255.252
@@ -65,7 +71,7 @@ interface GigabitEthernet0/0/3
 
 ip route-static 0.0.0.0 0.0.0.0 19.0.0.2
 
-# --- VPN IPSEC DINÁMICA (HUB SANTO DOMINGO <-> LA ROMANA) ---
+# --- TÚNEL DINÁMICO VPN IPSEC (HUB SANTO DOMINGO <-> LA ROMANA) ---
 acl number 3101
  description TRAFICO-INTERESANTE-VPN-SD-ROMANA
  rule 5 permit ip source 192.168.0.0 0.0.3.255 destination 192.168.20.0 0.0.0.255
@@ -92,7 +98,7 @@ ipsec policy POL-ROMANA 10 isakmp
 interface GigabitEthernet0/0/2
  ipsec policy POL-ROMANA
 
-# --- ENRUTAMIENTO OSPF MULTIÁREA (ÁREA 0 Y ÁREA 1) ---
+# --- ENRUTAMIENTO DINÁMICO OSPF MULTIÁREA (ÁREA 0 Y ÁREA 1) ---
 ospf 1 router-id 192.168.255.1
  area 0.0.0.0
   network 192.168.254.0 0.0.0.7
@@ -107,7 +113,7 @@ return
 save
 
 
-=== SW3 DISTRIBUCION 1 MASTER (SANTO DOMINGO) ===
+=== 2. SWITCH SW3 (DISTRIBUCION 1 MASTER - SANTO DOMINGO) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: SW3 (Switch de Distribución 1 — Santo Domingo)
@@ -117,7 +123,7 @@ save
 system-view
 sysname SW3
 
-# --- CREACIÓN DE VLANS ---
+# --- CREACIÓN DE VLANS CORPORATIVAS ---
 vlan batch 10 20 30 40 99 999
 
 # --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
@@ -138,7 +144,7 @@ user-interface vty 0 4
 dhcp enable
 
 # --- ENLACE ROUTED PORT HACIA ROUTER NÚCLEO R11 ---
-interface GigabitEthernet0/0/1
+interface GigabitEthernet1/0/0
  description Uplink-Routed-Hacia-R11
  undo portswitch
  ip address 192.168.254.10 255.255.255.252
@@ -188,42 +194,42 @@ interface Vlanif99
  vrrp vrid 99 virtual-ip 192.168.3.1
  vrrp vrid 99 priority 120
 
-# --- AGREGACIÓN DE ENLACES ETH-TRUNK ENTRE DISTRIBUIDORES ---
+# --- AGREGACIÓN DE ENLACES ETH-TRUNK (LACP) ENTRE DISTRIBUIDORES ---
 interface Eth-Trunk 1
- description Enlace-Troncal-Redundante-Hacia-SW4
+ description Troncal-Redundante-LACP-Hacia-SW4
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  mode lacp-static
 
-interface GigabitEthernet1/0/3
- description Miembro-EthTrunk1
- eth-trunk 1
-
-interface GigabitEthernet1/0/4
- description Miembro-EthTrunk1
+interface GigabitEthernet1/0/2
+ description Miembro-EthTrunk1-LACP
  eth-trunk 1
 
 interface GigabitEthernet1/0/5
- description Miembro-EthTrunk1
+ description Miembro-EthTrunk1-LACP
+ eth-trunk 1
+
+interface GigabitEthernet1/0/6
+ description Miembro-EthTrunk1-LACP
  eth-trunk 1
 
 # --- DOWNLINKS TRUNK HACIA SWITCHES DE ACCESO ---
-interface GigabitEthernet1/0/0
+interface GigabitEthernet1/0/1
  description Downlink-Hacia-SW5-Acceso1
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/1
+interface GigabitEthernet1/0/3
  description Downlink-Hacia-SW6-Acceso2
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/2
+interface GigabitEthernet1/0/4
  description Downlink-Hacia-SW7-Acceso3
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
@@ -267,7 +273,7 @@ return
 save
 
 
-=== SW4 DISTRIBUCION 2 BACKUP (SANTO DOMINGO) ===
+=== 3. SWITCH SW4 (DISTRIBUCION 2 BACKUP - SANTO DOMINGO) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: SW4 (Switch de Distribución 2 — Santo Domingo)
@@ -277,7 +283,7 @@ save
 system-view
 sysname SW4
 
-# --- CREACIÓN DE VLANS ---
+# --- CREACIÓN DE VLANS CORPORATIVAS ---
 vlan batch 10 20 30 40 99 999
 
 # --- SEGURIDAD Y ACCESO ADMINISTRATIVO AAA (SSH) ---
@@ -295,7 +301,7 @@ user-interface vty 0 4
  idle-timeout 10 0
 
 # --- ENLACE ROUTED PORT HACIA ROUTER NÚCLEO R11 ---
-interface GigabitEthernet0/0/0
+interface GigabitEthernet1/0/0
  description Uplink-Routed-Hacia-R11
  undo portswitch
  ip address 192.168.254.14 255.255.255.252
@@ -332,42 +338,42 @@ interface Vlanif99
  vrrp vrid 99 virtual-ip 192.168.3.1
  vrrp vrid 99 priority 100
 
-# --- AGREGACIÓN DE ENLACES ETH-TRUNK ENTRE DISTRIBUIDORES ---
+# --- AGREGACIÓN DE ENLACES ETH-TRUNK (LACP) ENTRE DISTRIBUIDORES ---
 interface Eth-Trunk 1
- description Enlace-Troncal-Redundante-Hacia-SW3
+ description Troncal-Redundante-LACP-Hacia-SW3
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  mode lacp-static
 
+interface GigabitEthernet1/0/1
+ description Miembro-EthTrunk1-LACP
+ eth-trunk 1
+
+interface GigabitEthernet1/0/2
+ description Miembro-EthTrunk1-LACP
+ eth-trunk 1
+
 interface GigabitEthernet1/0/3
- description Miembro-EthTrunk1
- eth-trunk 1
-
-interface GigabitEthernet1/0/4
- description Miembro-EthTrunk1
- eth-trunk 1
-
-interface GigabitEthernet1/0/5
- description Miembro-EthTrunk1
+ description Miembro-EthTrunk1-LACP
  eth-trunk 1
 
 # --- DOWNLINKS TRUNK HACIA SWITCHES DE ACCESO ---
-interface GigabitEthernet1/0/0
+interface GigabitEthernet1/0/6
  description Downlink-Hacia-SW5-Acceso1
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/1
+interface GigabitEthernet1/0/4
  description Downlink-Hacia-SW6-Acceso2
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
  port trunk pvid vlan 999
  stp bpdu-protection
 
-interface GigabitEthernet1/0/2
+interface GigabitEthernet1/0/5
  description Downlink-Hacia-SW7-Acceso3
  port link-type trunk
  port trunk allow-pass vlan 10 20 30 40 99
@@ -411,7 +417,7 @@ return
 save
 
 
-=== SW10 CORE GATEWAY (SANTIAGO) ===
+=== 4. SWITCH SW10 (CORE GATEWAY - SANTIAGO) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: SW10 (Switch L3 / Gateway de Sede Santiago)
@@ -449,7 +455,7 @@ interface GigabitEthernet1/0/0
 
 interface Vlanif254
  description Interfaz-WAN-NUBE
- ip address 192.168.254.3 255.255.254.248
+ ip address 192.168.254.3 255.255.255.248
  ospf authentication-mode md5 1 cipher Huawei@123
 
 # --- GATEWAYS DE LAS VLANS DE SANTIAGO ---
@@ -491,7 +497,7 @@ interface GigabitEthernet1/0/2
  port trunk allow-pass vlan 10 20 30 40
  port trunk pvid vlan 999
 
-# --- SEGURIDAD DE CAPA 2 Y FILTRADO ACL ---
+# --- SEGURIDAD DE CAPA 2 ---
 stp mode rstp
 stp priority 4096
 dhcp snooping enable
@@ -523,7 +529,7 @@ return
 save
 
 
-=== SW11 ACCESO SERVIDORES (SANTIAGO) ===
+=== 5. SWITCH SW11 (ACCESO SERVIDORES - SANTIAGO) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: SW11 (Switch de Acceso a Servidores — Santiago)
@@ -561,7 +567,7 @@ interface GigabitEthernet1/0/1
 
 # --- PUERTOS DE ACCESO DEDICADOS PARA SERVIDORES DE DATACENTER ---
 interface GigabitEthernet1/0/2
- description Servidor-SERVER3-FTP-RADIUS-NFS
+ description Servidor-SERVER3-FTP-RADIUS-NFS (192.168.10.68)
  port link-type access
  port default vlan 40
  port-security enable
@@ -572,7 +578,7 @@ interface GigabitEthernet1/0/2
  stp bpdu-protection
 
 interface GigabitEthernet1/0/3
- description Servidor-SERVER2-MAIL-Corporativo
+ description Servidor-SERVER2-MAIL-Corporativo (192.168.10.67)
  port link-type access
  port default vlan 40
  port-security enable
@@ -583,7 +589,7 @@ interface GigabitEthernet1/0/3
  stp bpdu-protection
 
 interface GigabitEthernet1/0/4
- description Servidor-SERVER1-DNS-WEB-DHCP
+ description Servidor-SERVER1-DNS-WEB-DHCP (192.168.10.66)
  port link-type access
  port default vlan 40
  port-security enable
@@ -599,7 +605,7 @@ return
 save
 
 
-=== R12 ROUTER (LA ROMANA) ===
+=== 6. ROUTER R12 (SUCURSAL LA ROMANA - DHCP SERVER) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: R12 (Router de Sucursal La Romana)
@@ -697,7 +703,7 @@ return
 save
 
 
-=== SW8 DISTRIBUCION (LA ROMANA) ===
+=== 7. SWITCH SW8 (DISTRIBUCION L3 RELAY - LA ROMANA) ===
 ! ==============================================================================
 ! SERVIDOM S.A. (EMPRESA 3) — CONFIGURACIÓN OFICIAL HUAWEI VRP
 ! Dispositivo: SW8 (Switch de Distribución L3 — La Romana)
@@ -723,13 +729,13 @@ user-interface vty 0 4
 dhcp enable
 
 # --- UPLINK ROUTED PORT HACIA ROUTER R12 ---
-interface GigabitEthernet0/0/0
+interface GigabitEthernet1/0/0
  description Uplink-Routed-Hacia-R12
  undo portswitch
  ip address 192.168.254.18 255.255.255.252
  ospf authentication-mode md5 1 cipher Huawei@123
 
-# --- GATEWAYS DE LAS VLANS DE LA ROMANA CON DHCP RELAY ---
+# --- GATEWAYS DE LAS VLANS DE LA ROMANA CON DHCP RELAY HACIA R12 ---
 interface Vlanif10
  description Depto1-CallCenter-Inbound-Gateway
  ip address 192.168.20.1 255.255.255.192
@@ -749,7 +755,7 @@ interface Vlanif20
  dhcp relay server-ip 192.168.254.2
 
 # --- DOWNLINK TRUNK HACIA SWITCH DE ACCESO SW9 ---
-interface GigabitEthernet1/0/0
+interface GigabitEthernet1/0/1
  description Downlink-Hacia-SW9-Acceso-CallCenter
  port link-type trunk
  port trunk allow-pass vlan 10 20 30

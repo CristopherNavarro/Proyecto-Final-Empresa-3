@@ -35,7 +35,7 @@ interface GigabitEthernet1/0/0
 
 interface Vlanif254
  description Interfaz-WAN-NUBE
- ip address 192.168.254.3 255.255.254.248
+ ip address 192.168.254.3 255.255.255.248
  ospf authentication-mode md5 1 cipher Huawei@123
 
 # --- GATEWAYS DE LAS VLANS DE SANTIAGO ---
@@ -77,7 +77,7 @@ interface GigabitEthernet1/0/2
  port trunk allow-pass vlan 10 20 30 40
  port trunk pvid vlan 999
 
-# --- SEGURIDAD DE CAPA 2 Y FILTRADO ACL ---
+# --- SEGURIDAD DE CAPA 2 ---
 stp mode rstp
 stp priority 4096
 dhcp snooping enable
